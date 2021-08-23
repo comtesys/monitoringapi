@@ -1,0 +1,202 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "SŽDC Api",
+    "version": "1.0.0",
+    "title": "SŽDC Api"
+  },
+  "schemes": ["http"],
+  "paths": {
+    "/api/zabbix/hosts": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Přehled všech hostů",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/hosts/{name}": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Přehled konkrétního hosta",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Název hosta (například: szdc000phaux159.f00.isfd.cz) - viz /api/zabbix/hosts"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "OBject"
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/services": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Přehled všech služeb",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/hostgroups": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Přehled všech skupin",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/problems": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Přehled všech chyb ",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/triggers": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Přehled všech triggerů ",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/{host}/{service}": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Vrátí aktuální stav služby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "host",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Název hosta (například: szdc000phaux159.f00.isfd.cz) - viz /api/zabbix/hosts"
+          },
+          {
+            "in": "path",
+            "name": "service",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Název služby (například: ICMP ping) - viz /api/zabix/services"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/triggers/{host}/{triggerId}": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Vrátí aktuální stav triggeru",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "host",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Název hosta (například: szdc000phaux159.f00.isfd.cz) - viz /api/zabbix/hosts"
+          },
+          {
+            "in": "path",
+            "name": "triggerId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Id triggeru"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/zabbix/statistics": {
+      "get": {
+        "tags": ["Zabbix"],
+        "summary": "Statistiky volání Zabbix API",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "Object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

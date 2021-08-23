@@ -1,0 +1,33 @@
+{
+  "sis0000bnont000.ensd.cz": {
+    "DNS port - TCP": {
+      "maintenance_status": "",
+      "status": "0",
+      "statusDescription": "Ok",
+      "acknowledged": "",
+      "host": "",
+      "service": "",
+      "is_unknown": false,
+      "is_ok": true,
+      "is_warning": false,
+      "is_error": false,
+      "is_critical": true
+    }
+  },
+
+  "sis0000phant000.ensd.cz": {
+    "DNS port - TCP": {
+      "maintenance_status": "",
+      "status": "0",
+      "statusDescription": "Ok",
+      "acknowledged": "",
+      "host": "",
+      "service": "",
+      "is_unknown": false,
+      "is_ok": true,
+      "is_warning": false,
+      "is_error": false,
+      "is_critical": true
+    }
+  }
+}
