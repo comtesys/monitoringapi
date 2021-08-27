@@ -17,6 +17,26 @@ router.get("/api/libre/devices/:name", async (ctx) => {
   ctx.body = result;
 });
 
+router.get("/api/libre/devices/:name/alerts", async (ctx) => {
+  const name = ctx.params["name"];
+  const result = (await libbreApi.request("/devices/" + name)) as any;
+  if (result.devices) {
+    if (result.devices?.length > 0) {
+      const device_id = result.devices[0].device_id;
+      if (device_id) {
+        const resultAlerts = (await libbreApi.request("/alerts")) as any;
+        if (resultAlerts && resultAlerts.alerts.length > 0) {
+          const deviceAlerts = resultAlerts.alerts.filter(
+            (f: any) => f.device_id === device_id
+          );
+          result["alerts"] = deviceAlerts;
+        }
+      }
+    }
+  }
+  ctx.body = result;
+});
+
 router.get("/api/libre/devicegroups", async (ctx) => {
   const result = await libbreApi.request("/devicegroups");
   ctx.body = result;
