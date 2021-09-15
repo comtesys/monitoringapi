@@ -21,6 +21,7 @@ export class ZabbixResult implements ZabbixResult {
   acknowledged: string = "";
   host: string = "";
   service: string = "";
+  trigger: any;
   is_unknown: boolean = false;
   is_ok: boolean = false;
   is_warning: boolean = false;
@@ -97,7 +98,7 @@ export enum ZabbixStatusResult {
   Ok = 2,
   Warning = 3,
   Error = 4,
-  Critical = 5
+  Critical = 5,
 }
 
 export interface ZabbixExtendedHost {

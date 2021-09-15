@@ -7,7 +7,7 @@ const axios = ax.default.create({
   httpsAgent: new https.Agent({
     rejectUnauthorized: false,
   }),
-  timeout: 45000,
+  timeout: 80000,
 });
 
 async function request<T>(method: string, params?: any) {
@@ -21,6 +21,7 @@ async function request<T>(method: string, params?: any) {
   };
   const result = await axios.post(zabbixUrl, data);
   if (result.data.error) {
+    console.log(result.data.error);
     throw new Error(result.data.error);
   }
   return result.data.result as T;

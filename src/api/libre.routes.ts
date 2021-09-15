@@ -20,16 +20,32 @@ router.get("/api/libre/devices/:name", async (ctx) => {
 router.get("/api/libre/devices/:name/alerts", async (ctx) => {
   const name = ctx.params["name"];
   const result = (await libbreApi.request("/devices/" + name)) as any;
+  result["is_unknown"] = true;
+  result["is_warning"] = false;
+  result["is_critical"] = false;
+  result["is_ok"] = false;
+  result["alerts"] = [];
+
   if (result.devices) {
     if (result.devices?.length > 0) {
       const device_id = result.devices[0].device_id;
       if (device_id) {
+        result["is_unknown"] = false;
+        result["is_ok"] = true;
         const resultAlerts = (await libbreApi.request("/alerts")) as any;
         if (resultAlerts && resultAlerts.alerts.length > 0) {
           const deviceAlerts = resultAlerts.alerts.filter(
             (f: any) => f.device_id === device_id
           );
-          result["alerts"] = deviceAlerts;
+          if (deviceAlerts.length > 0) {
+            result["is_ok"] = false;
+            result["alerts"] = deviceAlerts;
+            if (deviceAlerts.some((a: any) => a.severity === "critical")) {
+              result["is_critical"] = false;
+            } else {
+              result["is_warning"] = true;
+            }
+          }
         }
       }
     }

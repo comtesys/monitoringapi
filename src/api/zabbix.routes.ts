@@ -26,6 +26,8 @@ router.get("/api/zabbix/hosts/:name", async (ctx) => {
     ctx.body = null;
     return;
   }
+  //@ts-ignore
+  host.triggers = host.triggers?.filter((f) => f.status === "0");
   ctx.body = host;
 });
 
@@ -51,7 +53,6 @@ router.get("/api/zabbix/triggers", async (ctx) => {
 
 router.get("/api/zabbix/services", async (ctx) => {
   const result = await zabbixApi.request("item.get", {
-    selectHosts: ["hostid", "name", "maintenance_status"],
     output: "extend",
   });
   ctx.body = result;
@@ -104,6 +105,7 @@ router.get("/api/zabbix/triggers/:host/:triggerId", async (ctx) => {
     host: hostName,
     maintenance_status: host.maintenance_status,
     is_ok: true,
+    trigger: trigger,
   });
 });
 
@@ -138,7 +140,7 @@ router.get("/api/zabbix/:host/:item", async (ctx) => {
     return;
   }
 
-  const item = host.items.find(
+  let item = host.items.find(
     (x) => x.name === itemName || x.itemid == itemName
   );
   if (!item) {

@@ -1,4 +1,8 @@
-import { ZabbixProblem, ZabbixTrigger, ZabbixExtendedHost } from "./zabbix.models";
+import {
+  ZabbixProblem,
+  ZabbixTrigger,
+  ZabbixExtendedHost,
+} from "./zabbix.models";
 import { zabbixApi } from "./zabbix";
 import { appConfig } from "../../config";
 import { ExpirationStrategy, MemoryStorage } from "../cache";
@@ -31,7 +35,7 @@ export const getApiTriggers = async (): Promise<ZabbixTrigger[]> => {
     addZabbixHits();
     return await zabbixApi.request<ZabbixTrigger[]>("trigger.get", {
       selectHosts: ["hostid", "name", "maintenance_status"],
-      selectItems: ["itemid", "name"]
+      selectItems: ["itemid", "name"],
     });
   }
 
@@ -44,7 +48,7 @@ export const getApiTriggers = async (): Promise<ZabbixTrigger[]> => {
 
   const result = await zabbixApi.request<ZabbixTrigger[]>("trigger.get", {
     selectHosts: ["hostid", "name", "maintenance_status"],
-    selectItems: ["itemid", "name"]
+    selectItems: ["itemid", "name"],
   });
 
   if (result) {
@@ -58,7 +62,10 @@ export const getApiHosts = async (): Promise<ZabbixExtendedHost[]> => {
   if (!appConfig.USE_CACHE) {
     addZabbixHits();
     return await zabbixApi.request<ZabbixExtendedHost[]>("host.get", {
-      selectItems: ["itemid", "name"]
+      selectItems: ["itemid", "name"],
+      selectTriggers: ["host", "description", "status"],
+      selectTags: ["tag", "value"],
+      selectGroups: ["group", "name"],
     });
   }
 
@@ -70,7 +77,10 @@ export const getApiHosts = async (): Promise<ZabbixExtendedHost[]> => {
   }
 
   const result = await zabbixApi.request<ZabbixExtendedHost[]>("host.get", {
-    selectItems: ["itemid", "name"]
+    selectItems: ["itemid", "name"],
+    selectTriggers: ["host", "description", "status"],
+    selectTags: ["tag", "value"],
+    selectGroups: ["group", "name"],
   });
 
   if (result) {
