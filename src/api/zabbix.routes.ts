@@ -10,10 +10,8 @@ import { getZabbixStatistics } from "../infrastructure/zabbix/zabbix.statistics"
 import { router } from "../server";
 
 router.get("/api/zabbix/hosts", async (ctx) => {
-  const result = await zabbixApi.request("host.get", {
-    selectGroups: "extend",
-  });
-  ctx.body = result;
+  const apiHosts = await getApiHosts();
+  ctx.body = apiHosts;
 });
 
 router.get("/api/zabbix/hosts/:name", async (ctx) => {
