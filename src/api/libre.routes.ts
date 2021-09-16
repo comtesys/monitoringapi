@@ -14,6 +14,9 @@ router.get("/api/libre/devices", async (ctx) => {
 router.get("/api/libre/devices/:name", async (ctx) => {
   const name = ctx.params["name"];
   const result = await libbreApi.request("/devices/" + name);
+  const groups = await libbreApi.request("/devices/" + name + "/groups");
+  //@ts-ignore
+  result["groups"] = groups?.groups;
   ctx.body = result;
 });
 
@@ -66,5 +69,10 @@ router.get("/api/libre/devicegroups/:name", async (ctx) => {
 
 router.get("/api/libre/alerts", async (ctx) => {
   const result = await libbreApi.request("/alerts");
+  ctx.body = result;
+});
+
+router.get("/api/libre/locations", async (ctx) => {
+  const result = await libbreApi.request("/resources/locations");
   ctx.body = result;
 });
