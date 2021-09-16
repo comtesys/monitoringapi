@@ -16,7 +16,8 @@ router.get("/api/libre/devices/:name", async (ctx) => {
   const result = await libbreApi.request("/devices/" + name);
   const groups = await libbreApi.request("/devices/" + name + "/groups");
   //@ts-ignore
-  result["groups"] = groups?.groups;
+  result["groups"] = groups?.groups || [];
+
   ctx.body = result;
 });
 

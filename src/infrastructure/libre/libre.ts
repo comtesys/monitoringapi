@@ -16,11 +16,13 @@ const axios = ax.default.create({
 });
 
 async function request<T>(url: string) {
-  const result = await axios.get(`${libreUrl}${url}`);
-  if (result.data.error) {
-    throw new Error(result.data.error);
+  try {
+    const result = await axios.get(`${libreUrl}${url}`);
+    return result.data as T;
+  } catch (e) {
+    //console.error(e);
+    return null;
   }
-  return result.data as T;
 }
 
 export const libbreApi = {
