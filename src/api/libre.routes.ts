@@ -1,29 +1,41 @@
 import { libbreApi } from "../infrastructure/libre/libre";
 import { router } from "../server";
 
-router.get("/api/libre/services", async (ctx) => {
+router.get("/api/libre/services", async ctx => {
   const result = await libbreApi.request("/services");
   ctx.body = result;
 });
 
-router.get("/api/libre/devices", async (ctx) => {
+router.get("/api/libre/devices", async ctx => {
   const result = await libbreApi.request("/devices");
   ctx.body = result;
 });
 
-router.get("/api/libre/devices/:name", async (ctx) => {
+router.get("/api/libre/devices/:name", async ctx => {
   const name = ctx.params["name"];
   const result = await libbreApi.request("/devices/" + name);
-  const groups = await libbreApi.request("/devices/" + name + "/groups");
-  //@ts-ignore
-  result["groups"] = groups?.groups || [];
+  if (!result) {
+    ctx.body = null;
+    return;
+  }
+  try {
+    const groups = await libbreApi.request("/devices/" + name + "/groups");
+    //@ts-ignore
+    result["groups"] = groups?.groups || [];
+  } catch (e) {}
 
   ctx.body = result;
 });
 
-router.get("/api/libre/devices/:name/alerts", async (ctx) => {
+router.get("/api/libre/devices/:name/alerts", async ctx => {
   const name = ctx.params["name"];
+
   const result = (await libbreApi.request("/devices/" + name)) as any;
+  if (!result) {
+    console.error(name);
+    ctx.body = { is_unknown: true };
+    return;
+  }
   result["is_unknown"] = true;
   result["is_warning"] = false;
   result["is_critical"] = false;
@@ -38,9 +50,7 @@ router.get("/api/libre/devices/:name/alerts", async (ctx) => {
         result["is_ok"] = true;
         const resultAlerts = (await libbreApi.request("/alerts")) as any;
         if (resultAlerts && resultAlerts.alerts.length > 0) {
-          const deviceAlerts = resultAlerts.alerts.filter(
-            (f: any) => f.device_id === device_id
-          );
+          const deviceAlerts = resultAlerts.alerts.filter((f: any) => f.device_id === device_id);
           if (deviceAlerts.length > 0) {
             result["is_ok"] = false;
             result["alerts"] = deviceAlerts;
@@ -57,23 +67,23 @@ router.get("/api/libre/devices/:name/alerts", async (ctx) => {
   ctx.body = result;
 });
 
-router.get("/api/libre/devicegroups", async (ctx) => {
+router.get("/api/libre/devicegroups", async ctx => {
   const result = await libbreApi.request("/devicegroups");
   ctx.body = result;
 });
 
-router.get("/api/libre/devicegroups/:name", async (ctx) => {
+router.get("/api/libre/devicegroups/:name", async ctx => {
   const name = ctx.params["name"];
   const result = await libbreApi.request("/devicegroups/" + name);
   ctx.body = result;
 });
 
-router.get("/api/libre/alerts", async (ctx) => {
+router.get("/api/libre/alerts", async ctx => {
   const result = await libbreApi.request("/alerts");
   ctx.body = result;
 });
 
-router.get("/api/libre/locations", async (ctx) => {
+router.get("/api/libre/locations", async ctx => {
   const result = await libbreApi.request("/resources/locations");
   ctx.body = result;
 });

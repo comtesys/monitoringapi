@@ -5,6 +5,7 @@ export interface ZabbixResult {
   status: ZabbixStatusResult;
   statusDescription: string;
   acknowledged: string;
+  description: string;
   host: string;
   service: string;
   is_unknown: boolean;
@@ -12,6 +13,7 @@ export interface ZabbixResult {
   is_warning: boolean;
   is_error: boolean;
   is_critical: boolean;
+  trigger: any;
 }
 
 export class ZabbixResult implements ZabbixResult {
@@ -19,17 +21,20 @@ export class ZabbixResult implements ZabbixResult {
   status: ZabbixStatusResult = null;
   statusDescription: string = "";
   acknowledged: string = "";
+  description: string = "";
   host: string = "";
   service: string = "";
-  trigger: any;
   is_unknown: boolean = false;
   is_ok: boolean = false;
   is_warning: boolean = false;
   is_error: boolean = false;
   is_critical: boolean = false;
 
-  constructor(init?: Partial<ZabbixResult>, problem?: ZabbixProblem) {
+  constructor(init?: Partial<ZabbixResult>, problem?: ZabbixProblem, trigger?: ZabbixTrigger) {
     Object.assign(this, init);
+    if (trigger) {
+      this.description = trigger.description;
+    }
     if (this.is_ok) {
       this.setOk();
     }
@@ -48,19 +53,34 @@ export class ZabbixResult implements ZabbixResult {
 
     if (problem) {
       this.acknowledged = problem.acknowledged;
-      if (problem.severity === 0) {
+
+      //@ts-ignore
+      if (problem.severity === 0 || problem.severity === "0") {
         this.setUnknown();
       }
 
-      if (problem.severity === 2) {
+      //@ts-ignore
+      if (problem.severity === 1 || problem.severity === "1") {
+        this.setOk();
+      }
+
+      //@ts-ignore
+      if (problem.severity === 2 || problem.severity === "2") {
         this.setWarning();
       }
 
-      if (problem.severity === 3) {
+      //@ts-ignore
+      if (problem.severity === 3 || problem.severity === "3") {
         this.setError();
       }
 
-      if (problem.severity >= 4) {
+      //@ts-ignore
+      if (problem.severity === 4 || problem.severity === "4") {
+        this.setCritical();
+      }
+
+      //@ts-ignore
+      if (problem.severity === 5 || problem.severity === "5") {
         this.setCritical();
       }
     }
@@ -144,6 +164,7 @@ export interface ZabbixExtendedHost {
   proxy_address: string;
   auto_compress: string;
   items: ZabbixItem[];
+  triggers: ZabbixTrigger[];
 }
 
 export interface ZabbixProblem {

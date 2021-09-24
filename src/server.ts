@@ -11,6 +11,8 @@ import Koa from "koa";
 import Router from "koa-router";
 import send from "koa-send";
 import json from "koa-json";
+const responseTime = require("koa-response-time");
+
 import { appConfig } from "./config";
 import { koaSwagger } from "koa2-swagger-ui";
 import { addZabbixError } from "./infrastructure/zabbix/zabbix.statistics";
@@ -25,6 +27,7 @@ router.get("/swagger.json", async (ctx) => {
   await send(ctx, "swagger.json");
 });
 
+app.use(responseTime());
 app.use(json({ pretty: true }));
 app.use(router.routes());
 
@@ -48,7 +51,6 @@ const bootstrap = async () => {
 
 app.on("error", (err, ctx) => {
   addZabbixError();
-  console.error(err);
 });
 
 bootstrap();

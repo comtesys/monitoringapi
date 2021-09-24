@@ -20,8 +20,11 @@ async function request<T>(url: string) {
     const result = await axios.get(`${libreUrl}${url}`);
     return result.data as T;
   } catch (e) {
-    //console.error(e);
-    return null;
+    if (e.response?.data?.message.includes("found")) {
+      return null;
+    } else {
+      console.error(e);
+    }
   }
 }
 

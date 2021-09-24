@@ -1,16 +1,16 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "SŽDC Api",
+    "description": "Dpp Api",
     "version": "1.0.0",
-    "title": "SŽDC Api"
+    "title": "Dpp Api"
   },
   "schemes": ["http"],
   "paths": {
     "/api/zabbix/hosts": {
       "get": {
         "tags": ["Zabbix"],
-        "summary": "Přehled všech hostů",
+        "summary": "Přehled všech hostů včetně triggerů",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -23,10 +23,10 @@
         }
       }
     },
-    "/api/zabbix/hosts/{name}": {
+    "/api/zabbix/host/{name}": {
       "get": {
         "tags": ["Zabbix"],
-        "summary": "Přehled konkrétního hosta",
+        "summary": "Přehled konkrétního hosta (id nebo name)",
         "produces": ["application/json"],
         "parameters": [
           {
@@ -36,7 +36,7 @@
               "type": "string"
             },
             "required": true,
-            "description": "Název hosta (například: szdc000phaux159.f00.isfd.cz) - viz /api/zabbix/hosts"
+            "description": "Název hosta (například: szdc000phaux159.f00.isfd.cz) - viz /api/zabbix/host"
           }
         ],
         "responses": {
