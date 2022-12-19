@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Dpp Api",
+    "description": "Monitoring Api",
     "version": "1.0.0",
-    "title": "Dpp Api"
+    "title": "Monitoring Api"
   },
   "schemes": ["http"],
   "paths": {
